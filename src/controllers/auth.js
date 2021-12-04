@@ -4,6 +4,7 @@ const { users } = require("../../models");
 const jwt = require("jsonwebtoken");
 const Joi = require("joi");
 const bcrypt = require("bcrypt");
+const cloudinary = require("../thirdparty/cloudinary");
 
 exports.register = async (req, res) => {
   const { fullname, password, email, gender, phone, address } = req.body;
@@ -135,9 +136,19 @@ exports.checkAuth = async (req, res) => {
       });
     }
 
+    const image = cloudinary.url(dataUser.profile_pic);
+    console.log(image);
+
     res.send({
       status: "success",
-      dataUser,
+      email: dataUser.email,
+      id: dataUser.id,
+      fullname: dataUser.fullname,
+      gender: dataUser.gender,
+      phone: dataUser.phone,
+      address: dataUser.address,
+      role: dataUser.role,
+      profile_pic: image,
     });
   } catch (error) {
     res.status({
