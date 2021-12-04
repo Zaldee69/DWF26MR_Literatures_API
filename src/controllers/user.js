@@ -14,7 +14,7 @@ exports.editUser = async (req, res) => {
     await users.update(
       {
         ...userData,
-        profile_pic: process.env.PATH + req.files.image[0].filename,
+        profile_pic: process.env.PATH_FILE + req.files.image[0].filename,
       },
       {
         where: {
