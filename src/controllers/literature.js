@@ -6,7 +6,7 @@ exports.addLiteratures = async (req, res) => {
       ...req.body,
       isbn: Date.now(),
       status: "Waiting Approve",
-      attachment: process.env.PATH_FILE + req.files.image[0].filename,
+      attachment: process.env.PATH + req.files.image[0].filename,
       user: req.user.id,
       pages: parseInt(req.body.pages),
     });
