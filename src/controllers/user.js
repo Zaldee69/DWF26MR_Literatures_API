@@ -1,4 +1,5 @@
 const { users } = require("../../models");
+const cloudinary = require("../thirdparty/cloudinary");
 
 exports.editUser = async (req, res) => {
   try {
@@ -11,10 +12,19 @@ exports.editUser = async (req, res) => {
         exclude: ["createdAt", "updatedAt", "password"],
       },
     });
+
+    const result = await cloudinary.uploader.upload(req.files.image[0].path, {
+      folder: "literatures",
+      use_filename: true,
+      unique_filename: true,
+    });
+
+    console.log(result);
+
     await users.update(
       {
         ...userData,
-        profile_pic: process.env.PATH + req.files.image[0].filename,
+        profile_pic: result.public_id,
       },
       {
         where: {
@@ -29,6 +39,9 @@ exports.editUser = async (req, res) => {
       userData,
     });
   } catch (error) {
+    console.log(error);
+    console.log(req.files.image[0].path);
+
     res.status(500).send({
       status: "failed",
       message: "edit user failed",
