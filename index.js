@@ -1,6 +1,6 @@
+require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
-require("dotenv").config();
 // Get routes to the variabel
 const router = require("./src/routes");
 
