@@ -24,7 +24,6 @@ exports.addCollection = async (req, res) => {
         message: "add collections succes",
       });
     } catch (error) {
-      console.log(error);
       res.status(500).send({
         status: "failed",
         message: "add collection failed",
@@ -74,7 +73,6 @@ exports.getCollection = async (req, res) => {
       collectionsData,
     });
   } catch (error) {
-    console.log(error);
     res.status(500).send({
       status: "failed",
       message: "get collection failed",

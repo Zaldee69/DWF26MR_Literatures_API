@@ -1,12 +1,18 @@
 const { literatures, users } = require("../../models");
+const cloudinary = require("../thirdparty/cloudinary");
 
 exports.addLiteratures = async (req, res) => {
   try {
+    const results = await cloudinary.uploader.upload(req.files.image[0].path, {
+      folder: "literatures",
+      use_filename: true,
+    });
+
     const literaturesData = await literatures.create({
       ...req.body,
       isbn: Date.now(),
       status: "Waiting Approve",
-      attachment: process.env.PATH + req.files.image[0].filename,
+      attachment: results.public_id,
       user: req.user.id,
       pages: parseInt(req.body.pages),
     });
@@ -17,7 +23,6 @@ exports.addLiteratures = async (req, res) => {
       literaturesData,
     });
   } catch (error) {
-    console.log(error);
     res.status(500).send({
       status: "failed",
       message: "add literature failed",
@@ -27,7 +32,7 @@ exports.addLiteratures = async (req, res) => {
 
 exports.getLiteratures = async (req, res) => {
   try {
-    const literaturesData = await literatures.findAll({
+    const data = await literatures.findAll({
       order: [["id", "DESC"]],
       include: [
         {
@@ -50,13 +55,18 @@ exports.getLiteratures = async (req, res) => {
       },
     });
 
+    const literaturesData = {
+      data,
+      attachment: cloudinary.url(data.profile_pic),
+    };
+
     res.status(200).send({
       status: "success",
       message: "get literatures success",
-      literaturesData,
+
+      ...literaturesData,
     });
   } catch (error) {
-    console.log(error);
     res.status(500).send({
       status: "failed",
       message: "get literatures failed",
@@ -67,7 +77,7 @@ exports.getLiteratures = async (req, res) => {
 exports.getDetailLiteratures = async (req, res) => {
   try {
     const { id } = req.params;
-    const literaturesData = await literatures.findOne({
+    const data = await literatures.findOne({
       where: {
         id,
       },
@@ -92,10 +102,15 @@ exports.getDetailLiteratures = async (req, res) => {
       },
     });
 
+    const literaturesData = {
+      data,
+      attachment: cloudinary.url(data.profile_pic),
+    };
+
     res.status(200).send({
       status: "success",
       message: "get literatures success",
-      literaturesData,
+      ...literaturesData,
     });
   } catch (error) {
     res.status(500).send({
@@ -161,9 +176,14 @@ exports.getSearchLiteratures = async (req, res) => {
       },
     });
 
+    const literaturesData = {
+      data,
+      attachment: cloudinary.url(data.profile_pic),
+    };
+
     res.send({
       status: "Success",
-      data,
+      ...literaturesData,
     });
   } catch (error) {
     res.status(500).send({
@@ -176,7 +196,7 @@ exports.getSearchLiteratures = async (req, res) => {
 exports.getLiteraturesByUserID = async (req, res) => {
   try {
     const { id } = req.user;
-    const literaturesData = await literatures.findAll({
+    const data = await literatures.findAll({
       where: {
         user: id,
       },
@@ -201,10 +221,15 @@ exports.getLiteraturesByUserID = async (req, res) => {
       },
     });
 
+    const literaturesData = {
+      data,
+      attachment: cloudinary.url(data.profile_pic),
+    };
+
     res.status(200).send({
       status: "success",
       message: "get literatures success",
-      literaturesData,
+      ...literaturesData,
     });
   } catch (error) {
     res.status(500).send({
@@ -263,7 +288,6 @@ exports.editLiterature = async (req, res) => {
       message: "edit literatures success",
     });
   } catch (error) {
-    console.log(error);
     res.send(500).send({
       status: "failed",
       message: "edit literature failed",

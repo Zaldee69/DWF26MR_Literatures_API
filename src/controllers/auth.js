@@ -108,7 +108,6 @@ exports.login = async (req, res) => {
         token,
       });
     } catch (error) {
-      console.log(error);
       res.status(400).send({
         status: "failed",
         mesage: "server error",
@@ -137,7 +136,6 @@ exports.checkAuth = async (req, res) => {
     }
 
     const image = cloudinary.url(dataUser.profile_pic);
-    console.log(image);
 
     res.send({
       status: "success",

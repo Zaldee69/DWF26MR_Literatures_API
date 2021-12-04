@@ -19,8 +19,6 @@ exports.editUser = async (req, res) => {
       use_filename: true,
     });
 
-    console.log(results);
-
     await users.update(
       {
         ...userData,
@@ -39,7 +37,6 @@ exports.editUser = async (req, res) => {
       userData,
     });
   } catch (error) {
-    console.log(error);
     res.status(500).send({
       status: "failed",
       message: "edit user failed",
