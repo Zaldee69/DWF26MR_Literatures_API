@@ -11,7 +11,6 @@ exports.editUser = async (req, res) => {
         exclude: ["createdAt", "updatedAt", "password"],
       },
     });
-
     await users.update(
       {
         ...userData,
