@@ -1,5 +1,4 @@
 const { users } = require("../../models");
-const cloudinary = require("../thirdparty/cloudinary");
 
 //import package
 const jwt = require("jsonwebtoken");
