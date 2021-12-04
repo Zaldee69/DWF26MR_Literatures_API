@@ -1,4 +1,5 @@
 const { users } = require("../../models");
+const cloudinary = require("../thirdparty/cloudinary");
 
 //import package
 const jwt = require("jsonwebtoken");
@@ -107,6 +108,7 @@ exports.login = async (req, res) => {
         token,
       });
     } catch (error) {
+      console.log(error);
       res.status(400).send({
         status: "failed",
         mesage: "server error",
@@ -136,7 +138,8 @@ exports.checkAuth = async (req, res) => {
 
     res.send({
       status: "success",
-      dataUser,
+      ...dataUser,
+      attachment: cloudinary.url(data.image, { secure: true }),
     });
   } catch (error) {
     res.status({

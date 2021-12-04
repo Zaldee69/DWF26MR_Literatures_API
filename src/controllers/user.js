@@ -1,5 +1,4 @@
 const { users } = require("../../models");
-const cloudinary = require("../thirdparty/cloudinary");
 
 exports.editUser = async (req, res) => {
   try {
@@ -13,16 +12,10 @@ exports.editUser = async (req, res) => {
       },
     });
 
-    const result = await cloudinary.uploader.upload(req.files.image[0].path, {
-      folder: "literatures",
-      use_filename: true,
-      unique_filename: true,
-    });
-
     await users.update(
       {
         ...userData,
-        profile_pic: result.public_id,
+        profile_pic: process.env.PATH + req.files.image[0].filename,
       },
       {
         where: {
@@ -34,8 +27,7 @@ exports.editUser = async (req, res) => {
     res.status(200).send({
       status: "success",
       message: "edit user success",
-      ...userData,
-      attachment: cloudinary.url(data.image, { secure: true }),
+      userData,
     });
   } catch (error) {
     res.status(500).send({
