@@ -19,8 +19,6 @@ exports.editUser = async (req, res) => {
       unique_filename: true,
     });
 
-    console.log(result);
-
     await users.update(
       {
         ...userData,
@@ -36,12 +34,10 @@ exports.editUser = async (req, res) => {
     res.status(200).send({
       status: "success",
       message: "edit user success",
-      userData,
+      ...userData,
+      attachment: cloudinary.url(data.image, { secure: true }),
     });
   } catch (error) {
-    console.log(error);
-    console.log(req.files.image[0].path);
-
     res.status(500).send({
       status: "failed",
       message: "edit user failed",
