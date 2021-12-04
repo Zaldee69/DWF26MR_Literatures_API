@@ -137,8 +137,7 @@ exports.checkAuth = async (req, res) => {
 
     res.send({
       status: "success",
-      ...dataUser,
-      attachment: cloudinary.url(data.image, { secure: true }),
+      dataUser,
     });
   } catch (error) {
     res.status({

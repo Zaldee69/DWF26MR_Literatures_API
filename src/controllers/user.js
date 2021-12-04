@@ -14,7 +14,7 @@ exports.editUser = async (req, res) => {
     await users.update(
       {
         ...userData,
-        profile_pic: process.env.PATH + req.files.image[0].filename,
+        profile_pic: `http://localhost:3500/uploads/${req.files.image[0].filename}`,
       },
       {
         where: {
@@ -29,6 +29,7 @@ exports.editUser = async (req, res) => {
       userData,
     });
   } catch (error) {
+    console.log(error);
     res.status(500).send({
       status: "failed",
       message: "edit user failed",
