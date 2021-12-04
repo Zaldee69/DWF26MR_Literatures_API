@@ -11,7 +11,7 @@ app.use(express.json());
 app.use(cors());
 
 //port
-const port = 3500;
+const port = process.env.PORT || 3500;
 
 // Add endpoint grouping and router
 app.use("/api/v1/", router);
