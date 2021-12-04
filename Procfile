@@ -1,2 +1,2 @@
-release : npx sequelize-cli db:migrate:undo:all && npx sequelize-cli db:migrate
+release :  sequelizedb:migrate:undo:all && sequelize db:migrate
 web: node index.js
